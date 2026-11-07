@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Algo Trader Pro</title>
+<style>
+body{font-family:Arial;background:#101827;color:white;padding:15px}
+.container{max-width:500px;margin:auto}
+.card{background:#1d2a3d;padding:16px;border-radius:12px;margin:12px 0}
+input,select,button{width:100%;padding:13px;margin:7px 0;
+border:0;border-radius:8px;box-sizing:border-box;font-size:16px}
+button{background:#16c784;color:#06140d;font-weight:bold}
+h1{color:#16c784}
+#signal{font-size:25px;font-weight:bold;text-align:center}
+small{color:#b9c6d8}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Algo Trader Pro</h1>
+<p>NIFTY | BANKNIFTY | SENSEX</p>
+
+<div class="card">
+<h3>Market Settings</h3>
+<select id="market">
+<option>NIFTY</option>
+<option>BANKNIFTY</option>
+<option>SENSEX</option>
+</select>
+<select id="trend">
+<option value="up">15m Trend UP</option>
+<option value="down">15m Trend DOWN</option>
+<option value="side">Sideways</option>
+</select>
+</div>
+
+<div class="card">
+<h3>Market Data (खुद भरें)</h3>
+<input id="price" type="number" placeholder="Current Price">
+<input id="vwap" type="number" placeholder="VWAP">
+<input id="ema" type="number" placeholder="EMA 20">
+<input id="high" type="number" placeholder="Previous Candle High">
+<input id="low" type="number" placeholder="Previous Candle Low">
+<input id="volume" type="number" placeholder="Volume Ratio (जैसे 1.5)">
+<button onclick="analyze()">SIGNAL CHECK करें</button>
+</div>
+
+<div class="card">
+<h3>Trading Signal</h3>
+<div id="signal">NO TRADE</div>
+<p id="details">डेटा भरकर Signal Check करें।</p>
+</div>
+
+<div class="card">
+<small>यह शुरुआती सिग्नल डेमो है। इसमें लाइव Groww डेटा कनेक्शन और ऑटो ऑर्डर नहीं हैं। ट्रेड करने से पहले खुद जाँच करें।</small>
+</div>
+</div>
+
+<script>
+function analyze(){
+let p=+price.value;
+let v=+vwap.value;
+let e=+ema.value;
+let h=+high.value;
+let l=+low.value;
+let vol=+volume.value;
+let t=trend.value;
+let s="NO TRADE",d="शर्तें पूरी नहीं हुईं।";
+
+if(!p||!v||!e||!h||!l||!vol||h<=l){
+signal.textContent="NO TRADE";
+details.textContent="सभी सही डेटा भरें।";
+return;
+}
+
+if(p>v&&p>e&&p>h&&vol>=1.5&&t==="up"){
+s="BUY";
+d="Entry: "+p+" | SL: "+l+
+" | Target 1: "+(p+(p-l)*2).toFixed(2);
+}
+else if(p<v&&p<e&&p<l&&vol>=1.5&&t==="down"){
+s="SELL";
+d="Entry: "+p+" | SL: "+h+
+" | Target 1: "+(p-(h-p)*2).toFixed(2);
+}
+
+signal.textContent=s;
+details.textContent=d;
+}
+</script>
+</body>
+</html>
